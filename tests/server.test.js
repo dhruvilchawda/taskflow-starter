@@ -1,0 +1,2 @@
+const test=require('node:test');const assert=require('node:assert/strict');const server=require('../server');
+test('serves app, CSS and JavaScript and rejects other paths',async()=>{await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));try{const base='http://127.0.0.1:'+server.address().port;for(const path of ['/','/style.css','/app.js'])assert.equal((await fetch(base+path)).status,200);assert.equal((await fetch(base+'/package.json')).status,404);assert.equal((await fetch(base+'/other')).status,404);}finally{await new Promise(resolve=>server.close(resolve));}});
